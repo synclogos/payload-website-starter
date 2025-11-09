@@ -3,7 +3,7 @@ import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
 import { zh } from '@payloadcms/translations/languages/zh'
 import { en } from '@payloadcms/translations/languages/en'
 import { resendAdapter } from '@payloadcms/email-resend'
-import sharp from 'sharp' // sharp-import
+import sharp from 'sharp'
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
 import { fileURLToPath } from 'url'
@@ -49,7 +49,6 @@ export default buildConfig({
     components: {
       beforeLogin: ['@/components/BeforeLogin'],
       beforeDashboard: ['@/components/BeforeDashboard'],
-      afterNavLinks: ['@/roles'],
     },
     importMap: {
       baseDir: path.resolve(dirname),
