@@ -1,6 +1,8 @@
 import { vercelBlobStorage } from '@payloadcms/storage-vercel-blob'
 import { vercelPostgresAdapter } from '@payloadcms/db-vercel-postgres'
-
+import { zh } from '@payloadcms/translations/languages/zh'
+import { en } from '@payloadcms/translations/languages/en'
+import { resendAdapter } from '@payloadcms/email-resend'
 import sharp from 'sharp' // sharp-import
 import path from 'path'
 import { buildConfig, PayloadRequest } from 'payload'
@@ -21,14 +23,33 @@ const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
+  telemetry: false,
+  email: resendAdapter({
+    defaultFromAddress: 'SyncLogos@synclogos.com',
+    defaultFromName: 'Rosa',
+    apiKey: process.env.RESEND_API_KEY || '',
+  }),
+  i18n: {
+    supportedLanguages: { zh, en },
+  },
+  localization: {
+    locales: [
+      {
+        label: '英语',
+        code: 'en',
+      },
+      {
+        label: '汉语',
+        code: 'zh',
+      },
+    ],
+    defaultLocale: 'zh',
+  },
   admin: {
     components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
       beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below.
       beforeDashboard: ['@/components/BeforeDashboard'],
+      afterNavLinks: ['@/roles'],
     },
     importMap: {
       baseDir: path.resolve(dirname),
